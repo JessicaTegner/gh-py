@@ -54,7 +54,7 @@ if (! $result ) then
     if [ ! -d "${SCRIPT_DIR}/.gh-py" ]; then
       $PIP install --upgrade --target "${SCRIPT_DIR}/.gh-py" -q poetry
     fi
-    if [ ! -d ""${SCRIPT_DIR}/.venv" ]; then
+    if [ ! -d "${SCRIPT_DIR}/.venv" ]; then
       "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
       "${SCRIPT_DIR}/.gh-py/bin/poetry" install -q
     fi
@@ -79,5 +79,6 @@ if [ "$1" = "poetry" ]; then
     exit 0;
   fi
 
-"${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import gh_py.cli;import os;os.chdir('$CALLING_DIR');gh_py.cli.run('$*')"
+"${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import gh_py.cli;import os;os.chdir('${CALLING_DIR}');gh_py.cli.run('$*')"
+
 exit 0;
