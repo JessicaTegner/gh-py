@@ -6,14 +6,15 @@ defaults:
   run:
     shell: bash
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 concurrency:
   group: ci-tests-${{ github.ref }}-1
   cancel-in-progress: true
   
 jobs:
   test:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +51,7 @@ jobs:
 
   builder:
     needs: [test]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         os: [macos-11, windows-2019]
@@ -94,7 +95,7 @@ jobs:
 
   publisher_release:
     needs: [builder]
-    if: startsWith(github.event.ref, 'refs/tags/v') && github.ref == 'refs/heads/master'
+    if: startsWith(github.event.ref, 'refs/tags/v') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -113,7 +114,7 @@ jobs:
 
   publisher_latest:
     needs: [builder]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
