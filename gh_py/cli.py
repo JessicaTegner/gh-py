@@ -51,6 +51,7 @@ class CreateCommand(Command):
         self.line(f"Creating scaffolding in {ext_dir}") if self.io.output.is_debug() else None
         shutil.copytree(os.path.join(os.path.dirname(__file__), "scaffolding"), ext_dir)
         os.rename(os.path.join(ext_dir, "scaffolding"), os.path.join(ext_dir, name))
+        os.chmod(os.path.join(ext_dir, name), 0o755)
         os.remove(os.path.join(ext_dir, "__init__.py"))
         self.line(f"Scaffolding created in {ext_dir}") if self.io.output.is_debug() else None
 
