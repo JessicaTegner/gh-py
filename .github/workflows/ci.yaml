@@ -51,7 +51,7 @@ jobs:
 
   builder:
     needs: [test]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     strategy:
       matrix:
         os: [macos-11, windows-2019]
@@ -95,7 +95,7 @@ jobs:
 
   publisher_release:
     needs: [builder]
-    if: startsWith(github.event.ref, 'refs/tags/v') && github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/v') && github.repository == 'JessicaTegner/gh-py'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
