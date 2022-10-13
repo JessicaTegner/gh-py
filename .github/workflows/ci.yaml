@@ -6,6 +6,9 @@ defaults:
   run:
     shell: bash
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 concurrency:
   group: ci-tests-${{ github.ref }}-1
   cancel-in-progress: true
