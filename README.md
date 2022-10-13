@@ -1,6 +1,11 @@
 # GH-PY
 
 [![Build Status](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml/badge.svg)](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml)
+[![GitHub Releases](https://img.shields.io/github/tag/JessicaTegner/gh-py.svg)](https://github.com/JessicaTegner/gh-py/releases)
+[![gh-py PyPI Version](https://img.shields.io/pypi/v/gh-py?label=gh-py+pypi+version)](https://pypi.org/project/gh-py/)
+[![Development Status](https://img.shields.io/pypi/status/gh-py.svg)](https://pypi.python.org/pypi/gh-py/)
+[![gh-py Python version](https://img.shields.io/pypi/pyversions/gh-py.svg)](https://pypi.python.org/pypi/gh-py/)
+![License](https://img.shields.io/pypi/l/gh-py.svg)
 
 
 gh-py gh extensions, now made easy in python.
