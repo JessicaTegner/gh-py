@@ -26,7 +26,7 @@ else
 fi
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-cd ${SCRIPT_DIR}
+cd "${SCRIPT_DIR}"
 
 export PYTHONPATH="${SCRIPT_DIR}/.gh-py"
 export PATH="${SCRIPT_DIR}/.gh-py/bin:${PATH}"
@@ -54,9 +54,9 @@ if (! $result ) then
     if [ ! -d "${SCRIPT_DIR}/.gh-py" ]; then
       $PIP install --upgrade --target "${SCRIPT_DIR}/.gh-py" -q poetry
     fi
-    if [ ! -d ".venv" ]; then
-      ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
-      ${SCRIPT_DIR}/.gh-py/bin/poetry install -q
+    if [ ! -d ""${SCRIPT_DIR}/.venv" ]; then
+      "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
+      "${SCRIPT_DIR}/.gh-py/bin/poetry" install -q
     fi
     if [ ! -f "${SCRIPT_DIR}/poetry.lock" ]; then
       ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
@@ -67,17 +67,17 @@ fi
 
 if [ "$1" = "update" ] || [ "$1" = "install" ]; then
     echo "Updating extension environment."
-    ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
-    ${SCRIPT_DIR}/.gh-py/bin/poetry $1 -q
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" $1 -q
     echo "Extension environment updated."
     exit 0;
   fi
 
 if [ "$1" = "poetry" ]; then
     shift
-    ${SCRIPT_DIR}/.gh-py/bin/poetry $@
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" $@
     exit 0;
   fi
 
-${SCRIPT_DIR}/.gh-py/bin/poetry run python -c "import gh_py.cli;import os;os.chdir('$CALLING_DIR');gh_py.cli.run('$*')"
+"${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import gh_py.cli;import os;os.chdir('$CALLING_DIR');gh_py.cli.run('$*')"
 exit 0;
