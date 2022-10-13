@@ -9,7 +9,7 @@ from cleo.commands.command import Command
 from cleo.helpers import argument
 
 def run(args=None):
-    application = Application(name='gh-py', version='0.1.0')
+    application = Application(name='gh-py', version='1.0.1')
     application.add(CreateCommand())
     if args:
         input = StringInput(args)
