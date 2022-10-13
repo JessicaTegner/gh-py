@@ -9,7 +9,7 @@ if ! type -p pip >/dev/null; then
   exit 1
 fi
 
-if [[ "$(pwd -W)" ]] >/dev/null; then 
+if [[ "$(pwd -W)" ]] 2> /dev/null; then 
   CALLING_DIR=$(pwd -W)
 else 
   CALLING_DIR=$(pwd)
