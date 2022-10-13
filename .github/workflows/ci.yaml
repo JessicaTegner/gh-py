@@ -47,3 +47,87 @@ jobs:
         run: gh extension install .
       - name: run tests
         run: poetry run pytest
+
+  builder:
+    needs: [test]
+    if: github.ref == 'refs/heads/master'
+    strategy:
+      matrix:
+        os: [macos-11, windows-2019]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Discover python architecture
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            echo "PYTHON_ARCHITECTURE=x86" >> $GITHUB_ENV
+          else
+            echo "PYTHON_ARCHITECTURE=x64" >> $GITHUB_ENV
+          fi
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9.x"
+          architecture: "${{ env.PYTHON_ARCHITECTURE }}"
+      - name: Print Python Information
+        run: python -VV
+      - name: Install and configure Poetry
+        run: |
+          pip3 install poetry
+          poetry config virtualenvs.in-project true
+      - name: Set up cache
+        uses: actions/cache@v3
+        id: cached-poetry-dependencies
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Build distributions
+        run: poetry build -vv
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publisher_release:
+    needs: [builder]
+    if: startsWith(github.event.ref, 'refs/tags/v') && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish  to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  publisher_latest:
+    needs: [builder]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Make release
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: true
+          title: "Latest Development Version"
+          automatic_release_tag: "latest"
+          files: dist/*
