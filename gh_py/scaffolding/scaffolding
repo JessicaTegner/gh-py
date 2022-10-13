@@ -10,9 +10,9 @@ if ! type -p pip3 >/dev/null; then
   exit 1
 fi
 
-if type -p pwd >/dev/null; then
+if [[ "$(pwd -W)" ]]; then 
   CALLING_DIR=$(pwd -W)
-else
+else 
   CALLING_DIR=$(pwd)
 fi
 
