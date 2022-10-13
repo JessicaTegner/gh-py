@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Determine if python is in the PATH
+if ! type -p python3 >/dev/null; then
+  echo "python  not +found on the system" >&2
+  exit 1
+fi
+
+if ! type -p pip3 >/dev/null; then
+  echo "pip  not +found on the system" >&2
+  exit 1
+fi
+
+if type -p pwd >/dev/null; then
+  CALLING_DIR=$(pwd -W)
+else
+  CALLING_DIR=$(pwd)
+fi
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd ${SCRIPT_DIR}
+
+export PYTHONPATH="${SCRIPT_DIR}/.gh-py"
+export PATH="${SCRIPT_DIR}/.gh-py/bin:${PATH}"
+
+result=true
+for dir in "${SCRIPT_DIR}/.gh-py" "${SCRIPT_DIR}/.venv"
+do
+    if ! [ -d "$dir" ]; then
+        result=false
+        break
+    fi
+done
+
+for file in "${SCRIPT_DIR}/poetry.lock"
+do
+    if ! [ -f "$file" ]; then
+        result=false
+        break
+    fi
+done
+
+if (! $result ) then
+    echo "Installing extension environment."
+    if [ ! -d "${SCRIPT_DIR}/.gh-py" ]; then
+      pip3 install --upgrade --target "${SCRIPT_DIR}/.gh-py" -q poetry
+    fi
+    if [ ! -d ".venv" ]; then
+      ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
+      ${SCRIPT_DIR}/.gh-py/bin/poetry install -q
+    fi
+    if [ ! -f "${SCRIPT_DIR}/poetry.lock" ]; then
+      ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
+      ${SCRIPT_DIR}/.gh-py/bin/poetry install -q
+    fi
+    echo "Extension environment installed."
+fi
+
+if [ "$1" = "update" ] || [ "$1" = "install" ]; then
+    echo "Updating extension environment."
+    ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
+    ${SCRIPT_DIR}/.gh-py/bin/poetry $1 -q
+    echo "Extension environment updated."
+    exit 0;
+  fi
+
+if [ "$1" = "poetry" ]; then
+    shift
+    ${SCRIPT_DIR}/.gh-py/bin/poetry $@
+    exit 0;
+  fi
+
+${SCRIPT_DIR}/.gh-py/bin/poetry run python -c "import shlex;args = shlex.split('$*');import extension;import os;os.chdir('$CALLING_DIR');extension.run(args)"
+exit 0;
