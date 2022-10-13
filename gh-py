@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-if ! type -p python >/dev/null; then
+if ! type -p python3 >/dev/null; then
   echo "python  not +found on the system" >&2
   exit 1
 fi
 
-if ! type -p pip >/dev/null; then
+if ! type -p pip3 >/dev/null; then
   echo "pip  not +found on the system" >&2
   exit 1
 fi
