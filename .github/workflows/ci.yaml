@@ -41,5 +41,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      - name: Install as a local gh extension
+        run: gh extension install .
       - name: run tests
         run: poetry run pytest
