@@ -1,5 +1,8 @@
 # GH-PY
 
+[![Build Status](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml/badge.svg)](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml)
+
+
 gh-py gh extensions, now made easy in python
 
 ### Installation
@@ -75,3 +78,20 @@ $ gh repo create
 ```
 
 
+## Contributing
+
+Contributions are welcome. When opening a PR, please keep the following guidelines in mind:
+
+1. Before implementing, please open an issue for discussion.
+2. Make sure you have tests for the new logic.
+3. Add yourself to contributors at `README.md` unless you are already there. In that case tweak your contributions.
+
+
+## Contributors
+
+* [Jessica Tegner](https://github.com/JessicaTegner) - Maintainer
+
+
+## License
+
+Py-GH is available under MIT license. See LICENSE for more details.
