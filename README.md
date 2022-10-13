@@ -3,11 +3,13 @@
 [![Build Status](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml/badge.svg)](https://github.com/JessicaTegner/gh-py/actions/workflows/ci.yaml)
 
 
-gh-py gh extensions, now made easy in python
+gh-py gh extensions, now made easy in python.
+
+gh-py makes it possible to write gh extensions, and interact with the gh cli directly from python.
 
 ### Installation
 
-gh-py can be installed in afew different ways.
+gh-py can be installed in a few different ways.
 
 #### From GH.
 
@@ -40,15 +42,14 @@ $ poetry install
 
 ### Usage:
 
-After installing gh-py you can utilize it through either gh or it's own cli (where you'll create the scaffolding for your extension), or through python (where you can access gh functionality).
-
-
 #### Creating your extension
 
 To get started, create your extension scaffolding.
 
 ```
 $ gh py create gh-example
+# or if you installed through pip
+$ gh-py create gh-example
 Installing extension environment.
 Extension environment installed.
 Creating extension gh-example
@@ -67,7 +68,6 @@ Then go into your newly created directory, and take a look.
 
 After writing your python code, the way to publish your extension, is as with any other.
 
-
 ```
 # setup a git repository
 $ git init -b main
@@ -78,7 +78,7 @@ $ gh repo create
 ```
 
 
-## Contributing
+### Contributing
 
 Contributions are welcome. When opening a PR, please keep the following guidelines in mind:
 
@@ -87,11 +87,11 @@ Contributions are welcome. When opening a PR, please keep the following guidelin
 3. Add yourself to contributors at `README.md` unless you are already there. In that case tweak your contributions.
 
 
-## Contributors
+#### Contributors
 
 * [Jessica Tegner](https://github.com/JessicaTegner) - Maintainer
 
 
-## License
+### License
 
 Py-GH is available under MIT license. See LICENSE for more details.
