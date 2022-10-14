@@ -1,5 +1,5 @@
 import argparse
 
-def run(args=None):
+def run():
     parser = argparse.ArgumentParser(prog='My GH Extension')
-    parser.parse_args(args=args)
+    result = parser.parse_args()
