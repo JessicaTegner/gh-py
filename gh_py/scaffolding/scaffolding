@@ -78,5 +78,6 @@ if [ "$1" = "poetry" ]; then
     exit 0;
   fi
 
+"${SCRIPT_DIR}/.gh-py/bin/poetry" update -q -n
 "${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import shlex;args = shlex.split('$*');import extension;import os;os.chdir('$CALLING_DIR');extension.run(args)"
 exit 0;
