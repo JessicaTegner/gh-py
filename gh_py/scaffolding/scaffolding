@@ -40,14 +40,6 @@ do
     fi
 done
 
-for file in "${SCRIPT_DIR}/poetry.lock"
-do
-    if ! [ -f "$file" ]; then
-        result=false
-        break
-    fi
-done
-
 if (! $result ) then
     echo "Installing extension environment."
     if [ ! -d "${SCRIPT_DIR}/.gh-py" ]; then
@@ -57,20 +49,8 @@ if (! $result ) then
       "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
       "${SCRIPT_DIR}/.gh-py/bin/poetry" install -q
     fi
-    if [ ! -f "${SCRIPT_DIR}/poetry.lock" ]; then
-      "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
-      "${SCRIPT_DIR}/.gh-py/bin/poetry" install -q
-    fi
     echo "Extension environment installed."
 fi
-
-if [ "$1" = "update" ] || [ "$1" = "install" ]; then
-    echo "Updating extension environment."
-    "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
-    "${SCRIPT_DIR}/.gh-py/bin/poetry" $1 -q
-    echo "Extension environment updated."
-    exit 0;
-  fi
 
 if [ "$1" = "poetry" ]; then
     shift
@@ -78,6 +58,12 @@ if [ "$1" = "poetry" ]; then
     exit 0;
   fi
 
-"${SCRIPT_DIR}/.gh-py/bin/poetry" update -q -n
-"${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import shlex;args = shlex.split('$*');import extension;import os;os.chdir('$CALLING_DIR');extension.run()"
+if [ "pyproject.toml" -nt "poetry.lock" ] || [ ! -f "poetry.lock" ]; then
+    echo "Updating extension environment."
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" update -q -n
+    echo "Extension environment updated."
+fi
+
+"${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import os;os.chdir('$CALLING_DIR');import extension;extension.run('$*')"
 exit 0;

@@ -6,6 +6,7 @@ authors = ["John Doe <john.doe@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+cleo = {version = "^1.0.0a", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core"]

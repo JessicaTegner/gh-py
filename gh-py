@@ -31,19 +31,10 @@ cd "${SCRIPT_DIR}"
 export PYTHONPATH="${SCRIPT_DIR}/.gh-py"
 export PATH="${SCRIPT_DIR}/.gh-py/bin:${PATH}"
 
-
 result=true
 for dir in "${SCRIPT_DIR}/.gh-py" "${SCRIPT_DIR}/.venv"
 do
     if ! [ -d "$dir" ]; then
-        result=false
-        break
-    fi
-done
-
-for file in "${SCRIPT_DIR}/poetry.lock"
-do
-    if ! [ -f "$file" ]; then
         result=false
         break
     fi
@@ -58,10 +49,6 @@ if (! $result ) then
       "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
       "${SCRIPT_DIR}/.gh-py/bin/poetry" install -q
     fi
-    if [ ! -f "${SCRIPT_DIR}/poetry.lock" ]; then
-      ${SCRIPT_DIR}/.gh-py/bin/poetry config virtualenvs.in-project true
-      ${SCRIPT_DIR}/.gh-py/bin/poetry install -q
-    fi
     echo "Extension environment installed."
 fi
 
@@ -71,7 +58,13 @@ if [ "$1" = "poetry" ]; then
     exit 0;
   fi
 
-"${SCRIPT_DIR}/.gh-py/bin/poetry" update -q -n
+if [ "pyproject.toml" -nt "poetry.lock" ] || [ ! -f "poetry.lock" ]; then
+    echo "Updating extension environment."
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" config virtualenvs.in-project true
+    "${SCRIPT_DIR}/.gh-py/bin/poetry" update -q -n
+    echo "Extension environment updated."
+fi
+
 "${SCRIPT_DIR}/.gh-py/bin/poetry" run python -c "import gh_py.cli;import os;os.chdir('${CALLING_DIR}');gh_py.cli.run('$*')"
 
 exit 0;
