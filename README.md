@@ -69,6 +69,26 @@ Then go into your newly created directory, and take a look.
 * pyproject.toml - Basic pyproject.toml file, used to describe our project to poetry.
 
 
+#### Useful tips while developing your extension
+
+When using gh-py's scaffolding, you have the full power of [poetry](https://python-poetry.org/) at your disposal.  
+That means you can add, update, change or remove dependencies as you wish.  
+
+The way to do it here, is to use the build in poetry command in the scaffolding, like so:
+
+```
+# Here's some examples.
+# Note the "gh-example" is the executable for your extension.
+
+$ gh-example poetry add requests
+$ gh-example poetry remove requests
+
+```
+
+When you update your extension down the line, the scaffolding will take care to update the extension environment, when the end user updates your extension.  
+Note: For this to work, it is important to **not** commit the generated **poetry.lock** file.
+
+
 #### Publishing your Extension
 
 After writing your python code, the way to publish your extension, is as with any other.
