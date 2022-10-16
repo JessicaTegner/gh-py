@@ -20,3 +20,17 @@ def current_repository() -> Repository or GhPyNotARepositoryException:
         return r
     except GhPyGhException:
         raise GhPyNotARepositoryException("The current directory is not a git repository.")
+
+def exec(args: str) -> str:
+    """Execute a gh command.
+
+    Args:
+        args (str): The arguments to gh.
+
+    Returns:
+        str: The output of the command.
+
+    Raises:
+        GhPyGhException: If the command fails.
+    """    
+    return gh.exec(args)
