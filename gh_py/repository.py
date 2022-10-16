@@ -1,5 +1,5 @@
 class Repository:
-    def __init__(self, owner, name, url) -> None:
+    def __init__(self, owner:str, name:str, url:str) -> None:
         self.owner = owner
         self.name = name
         self.url = url
