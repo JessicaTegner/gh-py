@@ -64,6 +64,7 @@ Created extension gh-example
 
 Then go into your newly created directory, and take a look.
 
+* .gitignore - A default python gitignore, including the exclusion of gh-py files that shouldn't be committed to git
 * extension.py - Here is the entry point to your extension.
 * gh-example (or what ever else you called your extension) - This is the file that is the bridge between ghs extension system and our python world.
 * pyproject.toml - Basic pyproject.toml file, used to describe our project to poetry.
